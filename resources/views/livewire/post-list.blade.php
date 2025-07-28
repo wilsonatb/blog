@@ -1,8 +1,14 @@
 <div id="posts" class=" px-3 lg:px-7 py-6">
     <div class="flex justify-between items-center">
         <div>
+            @if ($this->activeCategory || $search)
+                <flux:button wire:click="clearFilters()" icon="x-mark" variant="subtle" />
+            @endif
             @if ($search)
                 Searching for: <span class="font-semibold">{{ $search }}</span>
+            @endif
+            @if ($this->activeCategory)
+                in category: <flux:badge variant="solid" color="{{ $this->activeCategory->background_color }}">{{ $this->activeCategory->title }}</flux:badge>
             @endif
         </div>
         <div class="flex items-center space-x-1 font-light ">

@@ -26,6 +26,15 @@
                 <!-- Contenedor flexible para contenido -->
                 <h5 class="mb-2 text-2xl font-bold tracking-tight">{{ $post->title }}</h5>
                 <p class="mb-3 font-normal">{{ $post->getExcerpt() }}</p>
+                <div class="flex flex-wrap gap-2">
+                    <!-- Mostrar categorías del post -->
+                    {{-- $post->categories is a relationship --}}
+                    @foreach ($post->categories as $category)
+                        <flux:link wire:navigate href="{{ route('posts.index', ['category' => $category->slug]) }}">
+                            <flux:badge variant="solid" color="{{ $category->background_color }}">{{ $category->title }}</flux:badge>
+                        </flux:link>
+                    @endforeach
+                </div>
             </div>
 
             <!-- Barra de acciones -->

@@ -6,6 +6,7 @@ use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -37,7 +38,31 @@ class CategoryResource extends Resource {
                     }),
                 TextInput::make('slug')->maxLength(255)->unique(ignoreRecord: true),
                 TextInput::make('text_color')->nullable()->default('#000000'),
-                TextInput::make('background_color')->nullable(),
+                Select::make('background_color')
+                ->options([
+                    'red' => 'Red',
+                    'green' => 'Green',
+                    'blue' => 'Blue',
+                    'yellow' => 'Yellow',
+                    'purple' => 'Purple',
+                    'orange' => 'Orange',
+                    'zinc' => 'Zinc',
+                    'amber' => 'Amber',
+                    'lime' => 'Lime',
+                    'emerald' => 'Emerald',
+                    'teal' => 'Teal',
+                    'cyan' => 'Cyan',
+                    'sky' => 'Sky',
+                    'indigo' => 'Indigo',
+                    'violet' => 'Violet',
+                    'fuchsia' => 'Fuchsia',
+                    'pink' => 'Pink',
+                    'rose' => 'Rose',
+                ])
+                ->default('blue')
+                ->required()
+                ->label('Background Color')
+                ->searchable(),
             ]);
     }
 

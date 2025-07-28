@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Models\Category;
 
-class PostController extends Controller
-{
-    public function index()
-    {
-
-        //$test = Post::take(5)->get();
+class PostController extends Controller {
+    public function index() {
         // Logic to retrieve and display blog posts
         return view('posts.index', [
-            'posts' => Post::published()->latest('published_at')->take(5)->get(), // Fetching latest posts with pagination
-        ]); // Assuming you have a view for displaying posts
+            'categories' => Category::whereHas('posts', function ($query) {
+                    $query->published();
+                })->take(10)->get(),
+        ]);
     }
 }

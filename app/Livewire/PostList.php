@@ -33,19 +33,28 @@ class PostList extends Component {
         $this->search = $search;
     }
 
+    public function clearFilters() {
+        $this->reset(['search', 'category']);
+        $this->resetPage(); // Reset pagination when clearing filters
+    }
+
     #[Computed()]
     public function posts() {
         return Post::published()
             ->orderBy('published_at', $this->sort)
             ->where('title', 'like', "%{$this->search}%")
-            ->when(Category::where('slug', $this->category)->exists(), function ($query) {
+            ->when($this->activeCategory(), function ($query) {
                 $query->withCategory($this->category);
             })
             ->paginate(3);
     }
 
+    #[Computed()]
+    public function activeCategory() {
+        return Category::where('slug', $this->category)->first();
+    }
+
     public function render() {
-        $posts = $this->posts;
         return view('livewire.post-list');
     }
 }
