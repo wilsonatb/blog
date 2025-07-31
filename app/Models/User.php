@@ -8,8 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -39,8 +38,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
@@ -50,12 +48,29 @@ class User extends Authenticatable
     /**
      * Get the user's initials
      */
-    public function initials(): string
-    {
+    public function initials(): string {
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function likes() {
+        return $this->belongsToMany(Post::class, 'post_like')->withTimestamps();
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Check if the user has liked a specific post.
+     *
+     * @param Post $post
+     * @return bool
+     */
+    public function hasLiked(Post $post): bool {
+        return $this->likes()->where('post_id', $post->id)->exists();
     }
 }

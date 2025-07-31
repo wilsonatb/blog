@@ -122,4 +122,8 @@ class Post extends Model {
             get: fn($value) => $value ? Carbon::parse($value)->format('d-m-Y') : null
         );
     } */
+
+    public function likes() {
+        return $this->belongsToMany(User::class, 'post_like')->withTimestamps();
+    }
 }
