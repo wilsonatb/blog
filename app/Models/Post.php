@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model {
-    /** @use HasFactory<\Database\Factories\PostFactory> */
+    /** @use HasFactory<PostFactory> */
     use HasFactory;
     use SoftDeletes;
 
@@ -37,19 +40,17 @@ class Post extends Model {
         ];
     }
 
-    public function author() {
+    public function author(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function categories() {
+    public function categories(): BelongsToMany {
         return $this->belongsToMany(Category::class);
     }
 
     /**
      * Scope a query to only include published posts.
      *
-     * @param Builder $query
-     * @return void
      */
     #[Scope]
     protected function published($query): void {
@@ -58,9 +59,6 @@ class Post extends Model {
 
     /**
      * Scope a query to only include featured posts.
-     *
-     * @param Builder $query
-     * @return void
      */
     #[Scope]
     protected function featured($query): void {
@@ -70,9 +68,6 @@ class Post extends Model {
     /**
      * Scope a query to include posts from a specific category.
      *
-     * @param Builder $query
-     * @param string $category
-     * @return void
      */
     #[Scope]
     protected function withCategory($query, $category): void {
@@ -82,10 +77,8 @@ class Post extends Model {
     }
 
     /**
-     * Get the excerpt of the post body.
+     * Get the excerpt of the Post body.
      *
-     * @param int $length
-     * @return string
      */
     public function getExcerpt($length = 200): String {
         return Str::limit(strip_tags($this->body), $length, '...');
@@ -98,14 +91,14 @@ class Post extends Model {
      */
     public function readingTime(): String {
         $wordCount = str_word_count(strip_tags($this->body));
-        $readingTime = ceil($wordCount / 250); // Assuming average reading speed of 250 words per minute
+        $readingTime = ceil($wordCount / 250); // Assuming an average reading speed of 250 words per minute
         return $readingTime . ' min read';
     }
 
 
     /**
      * Get the URL of the post's image.
-     * 
+     *
      * This method returns the full URL of the image, checking if it starts with 'http'.
      *
      * @return Attribute

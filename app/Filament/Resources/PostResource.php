@@ -81,6 +81,7 @@ class PostResource extends Resource {
                 CheckboxColumn::make('featured')->sortable(),
                 TextColumn::make('created_at')->date('d-m-Y')->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
