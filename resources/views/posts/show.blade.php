@@ -19,7 +19,7 @@
             class="article-actions-bar my-4 flex text-sm items-center justify-between border-t border-b border-gray-100 py-4 px-2">
             <div class="flex items-center">
                 <a class="flex items-center gap-2">
-                    <livewire:like-button :key="$post->id" :$post />
+                    <livewire:like-button :key="'likeButton-' . $post->id" :$post />
                 </a>
             </div>
             <div>
@@ -40,29 +40,7 @@
             @endforeach
         </div>
 
-        <div class="mt-10 comments-box border-t border-gray-100 pt-10">
-            <h2 class="text-2xl font-semibold text-gray-900 mb-5">Discussions</h2>
-            <flux:textarea/>
-            <flux:button class="mt-4" variant="primary">Post Comment</flux:button>
-
-            <!-- <a class="text-yellow-500 underline py-1" href=""> Login to Post Comments</a> -->
-
-            <div class="user-comments px-3 py-2 mt-5">
-                <div class="comment [&:not(:last-child)]:border-b border-gray-100 py-5">
-                    <div class="user-meta flex mb-4 text-sm items-center">
-                        <img class="w-7 h-7 rounded-full mr-3" src="" alt="mn">
-                        <span class="mr-1">user name</span>
-                        <span class="text-gray-500">. 15 days ago</span>
-                    </div>
-                    <div class="text-justify text-gray-700  text-sm">
-                        comment content
-                    </div>
-                </div>
-                <!-- <div class="text-gray-500 text-center">
-                        <span> No Comments Posted</span>
-                    </div> -->
-            </div>
-        </div>
+       <livewire:post-comments :$post :key="'comments' . $post->id" />
 
 
     </article>

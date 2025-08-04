@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -118,5 +119,14 @@ class Post extends Model {
 
     public function likes() {
         return $this->belongsToMany(User::class, 'post_like')->withTimestamps();
+    }
+
+    /**
+     * Get the comments for the post.
+     *
+     * @return HasMany
+     */
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class);
     }
 }
